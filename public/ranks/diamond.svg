@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 背景圆 -->
+    <circle cx="100" cy="100" r="100" fill="#B9F2FF"/>
+    <!-- 钻石 -->
+    <path d="M60 70L100 40L140 70L100 140L60 70Z" fill="#4CABE9"/>
+    <path d="M60 70L100 140L40 70H60Z" fill="#3498db"/>
+    <path d="M140 70L100 140L160 70H140Z" fill="#3498db"/>
+    <path d="M60 70L100 40L40 70H60Z" fill="#5DBEEF"/>
+    <path d="M140 70L100 40L160 70H140Z" fill="#5DBEEF"/>
+    <!-- 闪光效果 -->
+    <circle cx="80" cy="60" r="5" fill="white"/>
+    <circle cx="90" cy="80" r="3" fill="white"/>
+    <!-- 眼睛 -->
+    <circle cx="85" cy="100" r="5" fill="#4A4A4A"/>
+    <circle cx="115" cy="100" r="5" fill="#4A4A4A"/>
+    <!-- 嘴巴 -->
+    <path d="M90 120C90 120 95 125 100 125C105 125 110 120 110 120" stroke="#4A4A4A" stroke-width="3" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+    <!-- 背景 -->
+    <rect width="400" height="400" fill="#f8f9fa" rx="20" ry="20"/>
+    
+    <!-- 装饰元素 - 左上角 -->
+    <circle cx="50" cy="50" r="20" fill="#3498db" opacity="0.6"/>
+    <circle cx="80" cy="40" r="15" fill="#2c3e50" opacity="0.6"/>
+    
+    <!-- 装饰元素 - 右下角 -->
+    <circle cx="350" cy="350" r="25" fill="#3498db" opacity="0.6"/>
+    <circle cx="320" cy="360" r="15" fill="#2c3e50" opacity="0.6"/>
+    
+    <!-- 中心图形 - 简化的人物轮廓 -->
+    <g transform="translate(200, 200)">
+        <!-- 头部 -->
+        <circle cx="0" cy="-60" r="40" fill="#34495e"/>
+        <!-- 西装外形 -->
+        <path d="M -40 -20 L 40 -20 L 50 100 L -50 100 Z" fill="#2c3e50"/>
+        <!-- 衬衫 -->
+        <path d="M -30 -20 L 30 -20 L 35 60 L -35 60 Z" fill="#f8f9fa"/>
+        <!-- 领带 -->
+        <path d="M -5 -20 L 5 -20 L 10 0 L 0 40 L -10 0 Z" fill="#e74c3c"/>
+    </g>
+    
+    <!-- 装饰性几何元素 -->
+    <path d="M 50 200 L 150 200" stroke="#3498db" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+    <path d="M 250 200 L 350 200" stroke="#3498db" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+    
+    <!-- 科技感装饰 -->
+    <path d="M 30 150 L 50 150 L 60 160 L 40 160 Z" fill="#3498db" opacity="0.3"/>
+    <path d="M 350 250 L 370 250 L 380 260 L 360 260 Z" fill="#3498db" opacity="0.3"/>
+</svg>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 背景圆 -->
+    <circle cx="100" cy="100" r="100" fill="#FFE5B4"/>
+    <!-- 金币 -->
+    <circle cx="100" cy="100" r="50" fill="#FFB347"/>
+    <circle cx="100" cy="100" r="40" fill="#FFA500"/>
+    <!-- ¥符号 -->
+    <path d="M85 80L115 80M100 75L100 95M90 95L110 95M100 95L100 120" stroke="white" stroke-width="8" stroke-linecap="round"/>
+    <!-- 闪光效果 -->
+    <circle cx="80" cy="80" r="5" fill="white"/>
+    <circle cx="120" cy="90" r="3" fill="white"/>
+    <!-- 眼睛 -->
+    <circle cx="85" cy="100" r="5" fill="#4A4A4A"/>
+    <circle cx="115" cy="100" r="5" fill="#4A4A4A"/>
+    <!-- 嘴巴 -->
+    <path d="M90 120C90 120 95 125 100 125C105 125 110 120 110 120" stroke="#4A4A4A" stroke-width="3" stroke-linecap="round"/>
+</svg>
