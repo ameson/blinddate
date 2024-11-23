@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
@@ -39,7 +39,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory('/blinddate/'),  // 使用 hash 模式并设置 base URL
+  history: createWebHistory(),
   routes
 })
 
