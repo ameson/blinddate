@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
   {
@@ -7,7 +7,7 @@ const routes = [
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/basic-info',
+    path: '/basic',
     name: 'BasicInfo',
     component: () => import('../views/BasicInfo.vue')
   },
@@ -39,14 +39,8 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
-  scrollBehavior(to, from, savedPosition) {
-    return { 
-      top: 0,
-      behavior: 'smooth'
-    }
-  }
+  history: createWebHashHistory('/blinddate/'),  // 使用 hash 模式并设置 base URL
+  routes
 })
 
 export default router
