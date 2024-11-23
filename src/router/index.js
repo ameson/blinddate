@@ -40,7 +40,13 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior(to) {
+    // 只对特定页面进行滚动
+    if (['Family', 'Potential', 'Attitude'].includes(to.name)) {
+      return { top: 0, behavior: 'smooth' }
+    }
+  }
 })
 
 export default router
