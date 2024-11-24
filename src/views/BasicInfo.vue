@@ -27,6 +27,69 @@
         </div>
       </div>
     </section>
+    <!-- 体重和健康 -->
+<section class="section-block" ref="healthRef">
+  <h3>体重和健康</h3>
+  <div class="health-section">
+    <!-- 身高体重输入 -->
+    <div class="body-metrics">
+      <div class="metric-input">
+        <span class="metric-label">身高 (cm)</span>
+        <van-stepper
+          v-model="userInfo.height"
+          :min="140"
+          :max="220"
+          :step="1"
+          input-width="60px"
+          button-size="22px"
+        />
+      </div>
+      <div class="metric-input">
+        <span class="metric-label">体重 (kg)</span>
+        <van-stepper
+          v-model="userInfo.weight"
+          :min="35"
+          :max="150"
+          :step="0.5"
+          input-width="60px"
+          button-size="22px"
+        />
+      </div>
+    </div>
+
+    <!-- BMI 指数展示 -->
+    <div class="bmi-display" v-if="bmiValue">
+      <div class="bmi-value" :class="bmiStatus.class">
+        BMI: {{ bmiValue.toFixed(1) }}
+        <span class="bmi-label">{{ bmiStatus.label }}</span>
+      </div>
+      <div class="bmi-description">{{ bmiStatus.description }}</div>
+    </div>
+
+    <!-- 运动频率 -->
+    <div class="exercise-section">
+      <h4>运动频率</h4>
+      <div class="exercise-options">
+        <div
+          v-for="exercise in exerciseOptions"
+          :key="exercise.value"
+          class="exercise-card"
+          :class="{ 
+            active: userInfo.exerciseFrequency === exercise.value,
+            'hover-effect': userInfo.exerciseFrequency !== exercise.value 
+          }"
+          @click="handleExerciseSelect(exercise.value)"
+        >
+          <van-icon :name="exercise.icon" class="card-icon" size="24" />
+          <div class="card-content">
+            <span class="option-label">{{ exercise.label }}</span>
+            <small class="option-desc">{{ exercise.desc }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
     <!-- 学历选择 -->
     <section class="section-block" ref="educationRef">
@@ -141,11 +204,78 @@ import { ref, computed, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
+
 export default {
   name: 'BasicInfo',
   setup() {
     const store = useStore()
     const router = useRouter()
+     // 添加 exerciseOptions
+     const exerciseOptions = [
+      {
+        value: 'never',
+        label: '几乎不运动',
+        desc: '每周运动次数少于1次',
+        icon: 'tv-o'
+      },
+      {
+        value: 'occasionally',
+        label: '偶尔运动',
+        desc: '每周运动1-2次',
+        icon: 'walking-o'
+      },
+      {
+        value: 'regularly',
+        label: '经常运动',
+        desc: '每周运动3-4次',
+        icon: 'run-circle-o'
+      },
+      {
+        value: 'frequently',
+        label: '频繁运动',
+        desc: '每周运动5次以上',
+        icon: 'medal-o'
+      }
+    ]
+    // 添加 handleExerciseSelect
+    const handleExerciseSelect = async (value) => {
+      userInfo.value.exerciseFrequency = value
+      await smoothScroll(educationRef)
+    }
+// 在 setup 函数中添加
+const bmiValue = computed(() => {
+  if (!userInfo.value.height || !userInfo.value.weight) return 0
+  const heightInMeter = userInfo.value.height / 100
+  return userInfo.value.weight / (heightInMeter * heightInMeter)
+})
+
+const bmiStatus = computed(() => {
+  const currentBmi = bmiValue.value
+  if (!currentBmi) return { label: '', class: '', description: '' }
+  if (currentBmi < 17.5) return { 
+    label: '偏瘦', 
+    class: 'warning',
+    description: '建议适当增加营养摄入，保持健康饮食习惯。'
+  }
+  if (currentBmi <= 24.9) return { 
+    label: '标准', 
+    class: 'success',
+    description: '恭喜！你的体重处于健康范围，继续保持。'
+  }
+  if (currentBmi <= 27.9) return { 
+    label: '偏重', 
+    class: 'warning',
+    description: '建议适当控制饮食，增加运动量。'
+  }
+  return { 
+    label: '肥胖', 
+    class: 'danger',
+    description: '建议咨询医生或营养师，制定健康的减重计划。'
+  }
+})
+
+
+
 
     // 组件挂载时自动滚动到顶部
     onMounted(() => {
@@ -156,6 +286,7 @@ export default {
     })
 
     const ageGroupRef = ref(null)
+    const healthRef = ref(null) 
     const educationRef = ref(null)
     const occupationRef = ref(null)
     const locationRef = ref(null)
@@ -167,6 +298,7 @@ export default {
       occupation: '',
       height: 170,
       weight: 60,
+      exerciseFrequency: '', 
       cityTier: '',
       areaLocation: ''
     })
@@ -246,25 +378,20 @@ export default {
       }
     ]
 
-    const bmi = computed(() => {
-      const heightInMeter = userInfo.value.height / 100
-      return userInfo.value.weight / (heightInMeter * heightInMeter)
-    })
 
-    const bmiStatus = computed(() => {
-      const bmiValue = bmi.value
-      if (bmiValue < 17.5) return { text: '偏瘦', class: 'warning' }
-      if (bmiValue <= 24.9) return { text: '标准', class: 'success' }
-      if (bmiValue <= 27.9) return { text: '偏重', class: 'warning' }
-      return { text: '肥胖', class: 'danger' }
-    })
+
+  
 
     const isFormValid = computed(() => {
-      return userInfo.value.education &&
-             userInfo.value.occupation &&
-             userInfo.value.cityTier &&
-             userInfo.value.areaLocation
-    })
+        return userInfo.value.ageGroup &&
+              userInfo.value.height &&
+              userInfo.value.weight &&
+              userInfo.value.exerciseFrequency &&
+              userInfo.value.education &&
+              userInfo.value.occupation &&
+              userInfo.value.cityTier &&
+              userInfo.value.areaLocation
+      })
 
     const smoothScroll = async (targetRef) => {
       await nextTick()
@@ -280,7 +407,7 @@ export default {
 
     const handleAgeGroupSelect = async (value) => {
       userInfo.value.ageGroup = value
-      await smoothScroll(educationRef)
+      await smoothScroll(healthRef)
     }
 
     const handleEducationSelect = async (value) => {
@@ -326,14 +453,16 @@ export default {
       jobOptions,
       cityTierOptions,
       areaOptions,
-      bmi,
+      bmiValue, 
       bmiStatus,
+      exerciseOptions,
       isFormValid,
       handleAgeGroupSelect,
       handleEducationSelect,
       handleOccupationSelect,
       handleCityTierSelect,
       handleAreaLocationSelect,
+      handleExerciseSelect, 
       handleNext
     }
   }
@@ -540,5 +669,155 @@ h3 {
   margin-bottom: 12px;
   color: #666;
   font-size: 14px;
+}
+
+.health-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.body-metrics {
+  display: flex;
+  gap: 16px;
+}
+
+.metric-input {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.metric-label {
+  color: #666;
+  font-size: 14px;
+}
+
+.bmi-display {
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.bmi-value {
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bmi-label {
+  font-size: 14px;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.bmi-underweight { color: #e67e22; }
+.bmi-normal { color: #27ae60; }
+.bmi-overweight { color: #f39c12; }
+.bmi-obese { color: #e74c3c; }
+
+.bmi-description {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.exercise-section {
+  margin-top: 20px;
+}
+
+.exercise-section h4 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.exercise-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.exercise-card {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.exercise-card.hover-effect:hover {
+  border-color: #3498db;
+  transform: translateY(-2px);
+}
+
+.exercise-card.active {
+  background-color: #e8f4fc;
+  border-color: #3498db;
+}
+
+.card-icon {
+  margin-right: 12px;
+  color: #3498db;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.option-label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.option-desc {
+  font-size: 12px;
+  color: #666;
+}
+
+.frequency-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.frequency-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #f5f7fa;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.frequency-card.active {
+  background: #e6f3fc;
+  border: 2px solid #3498db;
+}
+
+.freq-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.freq-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.freq-desc {
+  font-size: 12px;
+  color: #666;
 }
 </style>

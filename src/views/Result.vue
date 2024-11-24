@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -297,9 +297,14 @@ export default {
       router.push('/')
     }
 
-    onMounted(() => {
-      currentRate.value = totalScore.value
-    })
+    onMounted(async () => {
+  currentRate.value = totalScore.value
+  await nextTick()
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+})
 
     return {
       currentRate,

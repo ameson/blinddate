@@ -7,7 +7,10 @@ export default createStore({
       economic: 0,
       family: 0,
       potential: 0,
-      attitude: 0
+      attitude: 0,
+      height: 170,
+      weight: 65,
+      exerciseFrequency: '',
     },
     userInfo: {
       // 基本信息
