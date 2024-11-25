@@ -82,7 +82,17 @@
         />
       </van-cell-group>
     </div>
-
+<!-- 二维码部分 -->
+<div class="qr-section">
+  <h3 class="section-title">
+    <van-icon name="qr" color="#2c3e50" size="20" style="margin-right: 6px" />
+    关注我们
+  </h3>
+  <div class="qr-content">
+    <img src="../assets/qr.jpg" alt="关注二维码" class="qr-image" />
+    <p class="qr-tip">扫码关注，获取更多婚恋指南</p>
+  </div>
+</div>
     <!-- 底部按钮 -->
     <div class="action-buttons">
       <van-button round block type="primary" size="large" @click="shareResult">
@@ -101,6 +111,8 @@
 import { ref, computed, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import html2canvas from 'html2canvas'
+import { showToast } from 'vant'
 
 export default {
   name: 'Result',
@@ -289,9 +301,37 @@ export default {
       return baseSuggestions
     })
 
-    const shareResult = () => {
-      console.log('分享结果')
+    const shareResult = async () => {
+  try {
+    // 获取结果页面的DOM元素
+    const resultElement = document.querySelector('.result')
+    if (!resultElement) {
+      showToast('生成图片失败')
+      return
     }
+
+    // 使用html2canvas将页面转换为图片
+    const canvas = await html2canvas(resultElement, {
+      useCORS: true,
+      scale: window.devicePixelRatio,
+      backgroundColor: '#ffffff'
+    })
+
+    // 将canvas转换为图片
+    const imgUrl = canvas.toDataURL('image/png')
+
+    // 创建一个临时链接用于下载
+    const link = document.createElement('a')
+    link.download = `相亲指数_${totalScore.value}分.png`
+    link.href = imgUrl
+    link.click()
+
+    showToast('图片已保存到相册')
+  } catch (error) {
+    console.error('生成图片失败:', error)
+    showToast('生成图片失败')
+  }
+}
 
     const restartTest = () => {
       store.commit('resetScores')
@@ -492,5 +532,33 @@ export default {
   padding: 0 12px;
   height: 28px;
   line-height: 26px;
+}
+
+.qr-section {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.qr-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+}
+
+.qr-image {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
+
+.qr-tip {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
 }
 </style>
