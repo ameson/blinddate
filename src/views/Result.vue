@@ -110,11 +110,12 @@ export default {
     const currentRate = ref(0)
 
     const totalScore = computed(() => {
-      const scores = store.state.scores
-      return Math.round(
-        Object.values(scores).reduce((sum, score) => sum + score, 0)
-      )
-    })
+  const scores = store.state.scores
+  const scoreItems = ['basic', 'economic', 'family', 'potential', 'attitude']
+  return Math.round(
+    scoreItems.reduce((sum, key) => sum + (scores[key] || 0), 0)
+  )
+})
 
     // 根据分数计算段位
     const rankInfo = computed(() => {
