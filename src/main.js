@@ -7,14 +7,7 @@ import store from './store'
 import Vant from 'vant'
 import 'vant/lib/index.css'
 
-// 百度统计代码
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?YOUR_TRACKING_ID"; // 请替换为你的百度统计跟踪ID
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
+
 
 // 创建应用实例
 const app = createApp(App)
